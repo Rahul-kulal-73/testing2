@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Calendar, Clock, X, User, AlertCircle, CheckCircle, Sun, CloudSun, Moon, Star } from 'lucide-react';
+import { Calendar, Clock, X, AlertCircle, CheckCircle, Sun, CloudSun, Moon, Star } from 'lucide-react';
 
 const VenueBookingSystem = () => {
-  // Set initial state to the current date.
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedVenue, setSelectedVenue] = useState('Hall 1');
@@ -11,7 +10,6 @@ const VenueBookingSystem = () => {
   const [notification, setNotification] = useState({ show: false, message: '', type: '' });
   const [showBookingPanel, setShowBookingPanel] = useState(false);
 
-  // Store bookings: { date: { venue: { slot: eventName } } }
   const [bookings, setBookings] = useState({
     '2025-09-15': { 'Hall 1': { 'Morning': 'Wedding' } },
     '2025-09-20': { 'ABR': { 'Full Day': 'Meeting' } }
@@ -52,7 +50,6 @@ const VenueBookingSystem = () => {
 
     const venueBookings = bookings[dateKey][venue];
 
-    // Check if Full Day is booked
     if (venueBookings['Full Day']) {
       return {
         available: false,
@@ -61,7 +58,6 @@ const VenueBookingSystem = () => {
       };
     }
 
-    // If trying to book Full Day, check if any slot is booked
     if (slot === 'Full Day') {
       const bookedSlots = Object.keys(venueBookings);
       if (bookedSlots.length > 0) {
@@ -73,7 +69,6 @@ const VenueBookingSystem = () => {
       }
     }
 
-    // Check if specific slot is booked
     if (venueBookings[slot]) {
       return {
         available: false,
@@ -114,13 +109,13 @@ const VenueBookingSystem = () => {
     showNotification(`Successfully booked for ${eventName} at ${selectedVenue}!`, 'success');
     setEventName('');
     setSelectedSlot(null);
-    setShowBookingPanel(false); // Close modal on successful booking
+    setShowBookingPanel(false);
   };
 
   const handleDateSelect = (day) => {
     setSelectedDate(new Date(currentDate.getFullYear(), currentDate.getMonth(), day));
-    setSelectedSlot(null); // Reset slot selection when date changes
-    setShowBookingPanel(true); // Open the booking panel/modal
+    setSelectedSlot(null);
+    setShowBookingPanel(true);
   };
 
   const getBookedSlotsForDay = (date, venue) => {
@@ -154,7 +149,7 @@ const VenueBookingSystem = () => {
         <div
           key={day}
           onClick={() => handleDateSelect(day)}
-          className={`h-16 md:h-20 p-2 cursor-pointer transition-all text-gray-700 flex flex-col relative
+          className={`h-16 md:h-20 p-2 cursor-pointer transition-all text-gray-700 flex flex-col relative 
             ${bgClass}
             ${isSelected ? 'ring-2 ring-blue-600 shadow-lg z-20' : 'hover:shadow-md hover:z-10'}
           `}
@@ -162,10 +157,10 @@ const VenueBookingSystem = () => {
           <div className={`font-semibold ${isSelected ? 'text-blue-600' : ''}`}>{day}</div>
           <div className="flex-grow"></div>
           {isFullDay && (
-            <div className="text-right text-xs font-bold text-red-700">Full Booked</div>
+            <div className="text-right md:text-xs text-[8px] font-bold text-red-700">Full Booked</div>
           )}
           {isPartial && (
-            <div className="text-right text-xs font-bold text-yellow-800">Partial Booked</div>
+            <div className="text-right md:text-xs text-[8px] font-bold text-yellow-800">Partial Booked</div>
           )}
         </div>
       );
@@ -177,7 +172,7 @@ const VenueBookingSystem = () => {
       days.push(<div key={`remaining-${i}`} className="bg-gray-50"></div>);
     }
 
-    return <div className="grid grid-cols-7 gap-px bg-gray-200 rounded-lg overflow-hidden border border-gray-200">{days}</div>;
+    return <div className="grid grid-cols-7 gap-px bg-gray-200 rounded-lg  border border-gray-200">{days}</div>;
   };
 
   const bookedSlotsForSelectedDate = React.useMemo(() => {
@@ -229,11 +224,12 @@ const VenueBookingSystem = () => {
 
       <div className="space-y-6">
         <div>
-          <label className="block text-sm font-semibold text-gray-600 mb-2 flex items-center gap-2">
+          <label className="text-sm font-semibold text-gray-600 mb-2 flex items-center gap-2">
             <Calendar className="w-4 h-4" />
             Event Type
           </label>
           <select
+            required
             value={eventName}
             onChange={(e) => setEventName(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 focus:outline-none transition bg-white text-sm sm:text-base"
@@ -246,7 +242,7 @@ const VenueBookingSystem = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-600 mb-2 flex items-center gap-2">
+          <label className="text-sm font-semibold text-gray-600 mb-2 flex items-center gap-2">
             <Clock className="w-4 h-4" />
             Select Time Slot
           </label>
@@ -314,7 +310,7 @@ const VenueBookingSystem = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-100 p-2 sm:p-4 font-sans">
+    <div className="min-h-screen fixed w-full bg-gray-100 p-2 sm:p-4 font-sans">
       <div className="w-full max-w-6xl mx-auto">
         {notification.show && (
           <div className={`fixed top-5 right-5 z-50 px-4 py-2 md:px-6 md:py-3 rounded-lg shadow-xl flex items-center gap-3 animate-bounce
@@ -325,15 +321,15 @@ const VenueBookingSystem = () => {
         )}
 
         <div className="bg-white rounded-xl shadow-xl p-4 md:p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 ">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Book Venue</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Book Your Venue</h1>
               <span className="text-2xl sm:text-3xl font-light text-gray-500 mt-2 sm:mt-0">{currentDate.getFullYear()}</span>
             </div>
             <div className="flex items-center justify-between mb-4">
               <button
                 onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1))}
-                className="px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition text-sm font-medium"
+                className="px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition text-sm font-medium"
               >
                 &lt; {prevMonthName}
               </button>
@@ -342,7 +338,7 @@ const VenueBookingSystem = () => {
               </h2>
               <button
                 onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1))}
-                className="px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition text-sm font-medium"
+                className="px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition text-sm font-medium"
               >
                 {nextMonthName} &gt;
               </button>
@@ -353,13 +349,11 @@ const VenueBookingSystem = () => {
             {renderCalendar()}
           </div>
 
-          {/* Right Section (Desktop) */}
           <div className="hidden lg:block bg-gray-50 rounded-lg p-4 md:p-6 border border-gray-200">
             {renderBookingPanel()}
           </div>
         </div>
 
-        {/* Modal (Mobile) */}
         {showBookingPanel && (
           <div className="lg:hidden fixed inset-0 bg-[#000000c0] bg-opacity-40 flex items-center justify-center z-50 p-4 transition-opacity duration-300">
             <div className="bg-gray-50 rounded-lg p-4 sm:p-6 border border-gray-200 w-full max-w-sm relative shadow-2xl">
@@ -379,4 +373,3 @@ const VenueBookingSystem = () => {
 };
 
 export default VenueBookingSystem;
-

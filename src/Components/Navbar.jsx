@@ -1,31 +1,30 @@
-import { Calendar, User } from 'lucide-react'
-import React from 'react'
+import { Calendar, User, CircleUserRound } from 'lucide-react'
 
 const Navbar = () => {
-    return (
-        <nav className="bg-white shadow-sm sticky top-0 z-40">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:py-4">
-                <div className="flex items-center justify-between h-16">
-                    <div className="flex items-center">
-                        <div className="flex-shrink-0 flex items-center gap-2">
-                            <Calendar className="h-8 w-8 text-blue-600" />
-                            <span className="text-xl font-bold text-gray-800">VenueBooker</span>
-                        </div>
-                        
-                    </div>
-                    <div className="hidden md:block">
-                        <div className="ml-4 flex items-center md:ml-6">
-                            <button className="p-1 rounded-full text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white">
-                                <span className="sr-only">User Profile</span>
-                                <User className="h-6 w-6" />
-
-                            </button>
-                        </div>
-                    </div>
-                </div>
+  const userName = "Elon Musk"
+  return (
+    <nav className="bg-white shadow-sm border-b border-gray-200">
+      <div className="w-full px-4 md:px-12">
+        <div className="flex items-center justify-between h-20">
+          <div className="flex items-center">
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-blue-500 rounded-lg">
+                <Calendar className="h-7 w-7 text-white" />
+              </div>
+              <span className="text-2xl font-bold text-gray-800">VenueBooker</span>
             </div>
-        </nav>
-    )
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className='font-bold text-lg hidden md:block'>{userName}</span>
+            <div className="w-12 h-12 bg-violet-500 rounded-full  flex items-center justify-center">
+              <CircleUserRound strokeWidth={1.5} className='text-white h-12 w-12' />
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  )
 }
 
 export default Navbar
